@@ -35,7 +35,9 @@ public class PneumaticsSubsystem extends SubsystemBase {
   public void openSolenoid(){
     solenoid.set(Value.kReverse);
   }
+  
   public void closeSolenoid(){
     solenoid.set(Value.kForward);
   }
+
 }
