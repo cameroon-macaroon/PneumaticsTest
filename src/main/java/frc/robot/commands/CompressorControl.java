@@ -5,36 +5,35 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import  frc.robot.subsystems.PneumaticsSubsystem;
 
-public class SolenoidControl extends CommandBase {
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.PneumaticsSubsystem;
+
+public class CompressorControl extends CommandBase {
   final PneumaticsSubsystem subsystem;
-  
-  /** Creates a new SolenoidControl. */
-  public SolenoidControl(PneumaticsSubsystem pneumaticsSubsystem) {
+  /** Creates a new CompressorControl. */
+  public CompressorControl(PneumaticsSubsystem pneumaticsSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-  
+
     subsystem = pneumaticsSubsystem;
     addRequirements(pneumaticsSubsystem);
-  
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-final XboxController xbox = new XboxController(0);
+  final XboxController xbox = new XboxController(0);
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (xbox.getXButton()){
-subsystem.openSolenoid();
-    }else {
-subsystem.closeSolenoid();
+    if (xbox.getXButton()) {
+      subsystem.turnOnCompressor();
+    }else{
+      subsystem.turnOffCompressor();
     }
-    
   }
 
   // Called once the command ends or is interrupted.
