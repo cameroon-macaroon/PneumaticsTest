@@ -18,8 +18,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   static CANSparkMax elevatorMotor = new CANSparkMax(1,MotorType.kBrushless);
-  DigitalInput topSwitch = new DigitalInput(0);
-  DigitalInput bottomSwitch = new DigitalInput(1);
+  public static DigitalInput topSwitch = new DigitalInput(0);
+  public static DigitalInput bottomSwitch = new DigitalInput(1);
 
 public static void turnOnMotor(double speed){
   elevatorMotor.set(speed);

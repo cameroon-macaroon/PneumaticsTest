@@ -8,11 +8,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 
-public class ElevatorUp extends CommandBase {
-  final XboxController xbox = new XboxController(0);
+public class ElevatorDown extends CommandBase {
   final ElevatorSubsystem subsystem;
-  /** Creates a new ElevatorUp. */
-  public ElevatorUp(ElevatorSubsystem elevatorSubsystem) {
+  /** Creates a new ElevatorDown. */
+  public ElevatorDown(ElevatorSubsystem elevatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     subsystem = elevatorSubsystem;
@@ -26,8 +25,8 @@ public class ElevatorUp extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(subsystem.topSwitch.get() && xbox.getYButton()){
-      subsystem.turnOnMotor(-.12);
+    if(subsystem.bottomSwitch.get() && xbox.getAButton()){
+      subsystem.turnOnMotor(.05);
     }
     else{
       subsystem.turnOnMotor(-.02);
