@@ -12,6 +12,11 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import com.revrobotics.CANSparkMax;
+
 public class PneumaticsSubsystem extends SubsystemBase {
   /** Creates a new PneumaticsSubsytem. */
   public PneumaticsSubsystem() {}
