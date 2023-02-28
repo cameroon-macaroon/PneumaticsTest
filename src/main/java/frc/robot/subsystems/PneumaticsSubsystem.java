@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import com.revrobotics.CANSparkMax;
 
 public class PneumaticsSubsystem extends SubsystemBase {
