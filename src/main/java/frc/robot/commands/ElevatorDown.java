@@ -9,6 +9,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 
 public class ElevatorDown extends CommandBase {
+  final XboxController xbox = new XboxController(0);
   final ElevatorSubsystem subsystem;
   /** Creates a new ElevatorDown. */
   public ElevatorDown(ElevatorSubsystem elevatorSubsystem) {
