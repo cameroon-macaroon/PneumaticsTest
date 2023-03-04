@@ -15,7 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState; 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; 
 import edu.wpi.first.math.util.Units;  
-import com.kauailabs.navx.frc.AHRS; 
+//import com.kauailabs.navx.frc.AHRS; 
 //import edu.wpi.first.wpilibj.SerialPort; 
 import edu.wpi.first.wpilibj.SPI; 
 import edu.wpi.first.math.geometry.Rotation2d; 
@@ -33,23 +33,98 @@ public class SwerveDriveTrain extends SubsystemBase {
   public static double frontRightOffset = 135.0; 
   public static double backLeftOffset = 135.0; 
   public static double backRightOffset = 65.0; 
+
   //set CAN ids for every module
+  public static final int frontLeftDriveId = 8; 
+  public static final int frontLeftCANCoderId = 6; 
+  public static final int frontLeftSteerId = 7; 
+  //put your can Id's here! 
+  public static final int frontRightDriveId = 14; 
+  public static final int frontRihtCANCoderId = 3; 
+  public static final int frontRightSteerId = 13; 
+  //put your can Id's here! 
+  public static final int backLeftDriveId = 10; 
+  public static final int backleftCANCoderId = 5; 
+  public static final int backLeftSteerId = 9; 
+  //put your can Id's here! 
+  public static final int backRightDriveId = 12; 
+  public static final int backRightCANCoderId = 4; 
+  public static final int backRightSteerId = 11; 
 
-  //set gyro
 
-  //create Swerve Drive Kinematics
+  
 
+
+
+  //set gyro 
+  //public static AHRS gyro = new AHRS(SPI.Port.kMXP); 
+
+  //create Swerve Drive Kinematics 
+  private SwerveDriveKinematics kinematics = new SwerveDriveKinematics( 
+    new Translation2d(
+      Units.inchesToMeters(10), 
+      Units.inchesToMeters(10)
+    ), 
+    new Translation2d(
+      Units.inchesToMeters(10), 
+      Units.inchesToMeters(-10)
+    ), 
+    new Translation2d(
+      Units.inchesToMeters(-10), 
+      Units.inchesToMeters(10)
+    ), 
+    new Translation2d(
+      Units.inchesToMeters(-10), 
+      Units.inchesToMeters(-10)
+    )
+  ); 
+    
+      
   //create array of Modules
+  private SwerveModuleMK3[] modules = new SwerveModuleMK3[] {
+    
+    new SwerveModuleMK3(new TalonFX(1), new TalonFX(1), new CANCoder(1), Rotation2d.fromDegrees(1)), // Front Left 
+    new SwerveModuleMK3(new TalonFX(2), new TalonFX(2), new CANCoder(2), Rotation2d.fromDegrees(2)), // Front Right 
+    new SwerveModuleMK3(new TalonFX(3), new TalonFX(3), new CANCoder(3), Rotation2d.fromDegrees(3)), // Back Left 
+    new SwerveModuleMK3(new TalonFX(4), new TalonFX(4), new CANCoder(4), Rotation2d.fromDegrees(4)), // Back Right 
+  }; 
+
 
 
 
   /** Creates a new SwerveDriveTrain. */
-  public SwerveDriveTrain() {}
+  public SwerveDriveTrain() {
+    // gyro.reset(); 
+  }
 
-  //Drive method
+  //Drive method 
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean calibrateGyro) {
 
-  @Override
+    if(calibrateGyro){
+     // gyro.reset(); // recalibrates gyro offset 
+    } 
+                                                                                      //Rotation2d.fromDegrees(-gyro.getAngle())
+    SwerveModuleState[] states = kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot,Rotation2d.fromDegrees(-gyro.getAngle())) : new ChassisSpeeds(xSpeed, ySpeed, rot)); 
+
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, kMaxSpeed); 
+
+    for(int i = 0; i < states.length; i++) { 
+      SwerveModuleMK3 module = modules[i]; 
+      SwerveModuleState state = states[i]; 
+      SmartDashboard.putNumber(String.valueOf(i), module.getRawAngle()); 
+      //below is a line to comment out from step 5 
+      module.setDesiredState(state); 
+      //SmartDashboard.putNumber("gyro Angle", gyro.getAngle()); 
+    }
+  }
+
+  @Override 
   public void periodic() {
     // This method will be called once per scheduler run
+  } 
+
+  @Override 
+  public void simulationPeriodic() {
+    // This method will be called once per schedule run during simulation
   }
-}
+} 

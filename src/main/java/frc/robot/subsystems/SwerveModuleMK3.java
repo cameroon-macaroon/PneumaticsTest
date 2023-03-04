@@ -66,22 +66,67 @@ public class SwerveModuleMK3 {
     angleTalonFXConfiguration.slot0.kD = kAngleD;
 
     // set remote Sensor to canCoder
+    angleTalonFXConfiguration.remoteFilter0.remoteSensorDeviceID = canCoder.getDeviceID();
+    angleTalonFXConfiguration.remoteFilter0.remoteSensorSource = RemoteSensorSource.CANCoder;
+
     // set feedback Sensor to remote Sensor
+    angleTalonFXConfiguration.primaryPID.selectedFeedbackSensor = FeedbackDevice.RemoteSensor0;
+    
     // configure created Configuration^^
+    angleMotor.configAllSettings(angleTalonFXConfiguration);
     // set nuetral mode to break
+    angleMotor.setNeutralMode(NeutralMode.Brake);
+
+    
 
 //drive motor settings
     // creat drive Talon Configuration
-    // set PIDF values
+    TalonFXConfiguration driveTalonFXConfiguration = new TalonFXConfiguration(); 
+    // set PIDF values 
+    driveTalonFXConfiguration.slot0.kP = kDriveP; 
+    driveTalonFXConfiguration.slot0.kI = kDriveI; 
+    driveTalonFXConfiguration.slot0.kD = kDriveD;
+    driveTalonFXConfiguration.slot0.kF = kDriveF; 
 
-    // configure created Configureation^^
+
+    // configure created Configureation^^ 
+    driveMotor.configAllSettings(driveTalonFXConfiguration); 
     // set nuetral mode to break
+    driveMotor.setNeutralMode(NeutralMode.Brake); 
+    
+    CANCoderConfiguration canCoderConfiguration = new CANCoderConfiguration(); 
+    canCoderConfiguration.magnetOffsetDegrees = offset.getDegrees(); 
+    canCoder.configAllSettings(canCoderConfiguration); 
 
   }
 
   //method to get Angle (from CANCoder degrees)
+  public Rotation2d getAngle() {
+    return Rotation2d.fromDegrees(canCoder.getAbsolutePosition()); 
+  }
   //method to get Raw Angle (from CANCoder double)
+  public double getRawAngle() {
+    return canCoder.getAbsolutePosition(); 
+  }
 
-  //method to set Desired State
+  //method to set Desired State 
+  public void setDesiredState(SwerveModuleState desiredState) {
+    Rotation2d currentRotation = getAngle(); 
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, currentRotation); 
 
+    Rotation2d rotationDelta = state.angle.minus(currentRotation); 
+
+    double deltaTicks = (rotationDelta.getDegrees() / 360) * kEncoderTicksPerRotation;
+
+    double currentTicks = canCoder.getPosition() / canCoder.configGetFeedbackCoefficient(); 
+    double desiredTicks = currentTicks + deltaTicks; 
+    
+    //below is a line to comment out from step 5 
+    angleMotor.set(TalonFXControlMode.Position, desiredTicks); 
+
+    double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond); 
+
+    //below is a line to comment out from step 5 
+    driveMotor.set(TalonFXControlMode.PercentOutput, feetPerSecond / SwerveDriveTrain.kMaxSpeed); 
+  }
 }

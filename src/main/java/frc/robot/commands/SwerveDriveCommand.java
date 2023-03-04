@@ -45,9 +45,9 @@ public class SwerveDriveCommand extends CommandBase {
   public void execute() {
 
     //calculate ySpeed, xSpeed, rotSpeed
-    final var xSpeed = -xSpeedLimiter.calculate(xbox.getRawAxis(1));  //times max speed
-    final var ySpeed = -ySpeedLimiter.calculate(xbox.getRawAxis(0));  //times max speed
-    final var rot = -rotLimiter.calculate(xbox.getRawAxis(4));  //times max angle speed
+    final var xSpeed = -xSpeedLimiter.calculate(xbox.getRawAxis(1)* SwerveDriveTrain.kMaxSpeed);  //times max speed
+    final var ySpeed = -ySpeedLimiter.calculate(xbox.getRawAxis(0)* SwerveDriveTrain.kMaxSpeed);  //times max speed
+    final var rot = -rotLimiter.calculate(xbox.getRawAxis(4)* SwerveDriveTrain.kMaxSpeed);  //times max angle speed
 
     //set calibration type (self / field)
     boolean calibrate = xbox.getLeftBumper();
