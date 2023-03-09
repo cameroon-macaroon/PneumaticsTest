@@ -94,7 +94,7 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   /** Creates a new SwerveDriveTrain. */
   public SwerveDriveTrain() {
-    gyro.reset(); 
+     gyro.reset(); 
   }
 
   //Drive method 
@@ -114,7 +114,7 @@ public class SwerveDriveTrain extends SubsystemBase {
       SmartDashboard.putNumber(String.valueOf(i), module.getRawAngle()); 
       //below is a line to comment out from step 5 
       module.setDesiredState(state); 
-      SmartDashboard.putNumber("gyro Angle", gyro.getAngle()); 
+      //SmartDashboard.putNumber("gyro Angle", gyro.getAngle()); 
     }
   }
 
