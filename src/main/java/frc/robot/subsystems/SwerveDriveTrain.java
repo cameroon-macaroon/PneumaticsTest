@@ -15,7 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState; 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; 
 import edu.wpi.first.math.util.Units;  
-//import com.kauailabs.navx.frc.AHRS; 
+import com.kauailabs.navx.frc.AHRS; 
 //import edu.wpi.first.wpilibj.SerialPort; 
 import edu.wpi.first.wpilibj.SPI; 
 import edu.wpi.first.math.geometry.Rotation2d; 
@@ -57,7 +57,7 @@ public class SwerveDriveTrain extends SubsystemBase {
 
 
   //set gyro 
-  //public static AHRS gyro = new AHRS(SPI.Port.kMXP); 
+  public static AHRS gyro = new AHRS(SPI.Port.kMXP); 
 
   //create Swerve Drive Kinematics 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics( 
@@ -94,14 +94,14 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   /** Creates a new SwerveDriveTrain. */
   public SwerveDriveTrain() {
-    // gyro.reset(); 
+    gyro.reset(); 
   }
 
   //Drive method 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean calibrateGyro) {
 
     if(calibrateGyro){
-     // gyro.reset(); // recalibrates gyro offset 
+      gyro.reset(); // recalibrates gyro offset 
     } 
                                                                                       //Rotation2d.fromDegrees(-gyro.getAngle())
     SwerveModuleState[] states = kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot,Rotation2d.fromDegrees(-gyro.getAngle())) : new ChassisSpeeds(xSpeed, ySpeed, rot)); 
@@ -114,7 +114,7 @@ public class SwerveDriveTrain extends SubsystemBase {
       SmartDashboard.putNumber(String.valueOf(i), module.getRawAngle()); 
       //below is a line to comment out from step 5 
       module.setDesiredState(state); 
-      //SmartDashboard.putNumber("gyro Angle", gyro.getAngle()); 
+      SmartDashboard.putNumber("gyro Angle", gyro.getAngle()); 
     }
   }
 
