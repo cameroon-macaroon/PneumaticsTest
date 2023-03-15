@@ -4,19 +4,21 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ElevatorSubsystem;
-import edu.wpi.first.wpilibj.XboxController;
 
 public class ElevatorUp extends CommandBase {
-  final XboxController xbox = new XboxController(0);
-  final ElevatorSubsystem subsystem;
+  final ElevatorSubsystem elevatorSubsystem;
+  boolean isPressed;
   /** Creates a new ElevatorUp. */
-  public ElevatorUp(ElevatorSubsystem elevatorSubsystem) {
+  public ElevatorUp(ElevatorSubsystem m_elevatorSubsystem, boolean m_isPressed) {
     // Use addRequirements() here to declare subsystem dependencies.
 
-    subsystem = elevatorSubsystem;
-    addRequirements(elevatorSubsystem);
+    elevatorSubsystem = m_elevatorSubsystem;
+    addRequirements(m_elevatorSubsystem);
+
+    isPressed = m_isPressed;
   }
 
   // Called when the command is initially scheduled.
@@ -26,11 +28,14 @@ public class ElevatorUp extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(subsystem.topSwitch.get() && xbox.getYButton()){
-      subsystem.turnOnMotor(-.12);
+    if(elevatorSubsystem.topSwitch.get() && isPressed){
+      elevatorSubsystem.turnOnMotor(-.12);
+      SmartDashboard.putString("State","Moving Up");
     }
     else{
-      subsystem.turnOnMotor(-.02);
+      elevatorSubsystem.turnOnMotor(-.02);
+      
+      SmartDashboard.putString("State","Static");
     }
   }
 

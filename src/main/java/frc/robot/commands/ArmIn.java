@@ -4,32 +4,34 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ArmSubsystem;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmExtend extends CommandBase {
-  private final ArmSubsystem subsystem;
-  /** Creates a new ArmExtend. */
-  public ArmExtend(ArmSubsystem armSubsystem) {
-    subsystem = armSubsystem;
+public class ArmIn extends CommandBase {
+  private final ArmSubsystem armSubsystem;
+
+  boolean isPressed;
+  /** Creates a new ArmIn. */
+  public ArmIn(ArmSubsystem m_armSubsystem, boolean m_isPressed) {
+    armSubsystem = m_armSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(armSubsystem);
+    addRequirements(m_armSubsystem);
+
+    isPressed = m_isPressed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-  final XboxController xbox = new XboxController (0);
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (xbox.getRightBumper()){
-      subsystem.spinMotor(-.3);
+    if (isPressed){
+      armSubsystem.spinMotor(.2);
     }
     else {
-      subsystem.spinMotor(0);
+      armSubsystem.spinMotor(0);
     }
   }
 

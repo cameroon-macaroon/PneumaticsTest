@@ -4,37 +4,41 @@
 
 package frc.robot.commands;
 
+import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import  frc.robot.subsystems.PneumaticsSubsystem;
 
-public class SolenoidControl extends CommandBase {
-  final PneumaticsSubsystem subsystem;
-  
-  /** Creates a new SolenoidControl. */
-  public SolenoidControl(PneumaticsSubsystem pneumaticsSubsystem) {
+public class ArmOut extends CommandBase {
+  private final ArmSubsystem armSubsystem;
+
+  boolean isPressed;
+
+  /** Creates a new ArmExtend. */
+  public ArmOut(ArmSubsystem m_armSubsystem, boolean m_isPressed) {
+    armSubsystem = m_armSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-  
-    subsystem = pneumaticsSubsystem;
-    addRequirements(pneumaticsSubsystem);
-  
+    addRequirements(m_armSubsystem);
+
+    isPressed = m_isPressed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-final XboxController xbox = new XboxController(0);
-
+  final XboxController xbox = new XboxController (0);
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (xbox.getXButton()){
-subsystem.openSolenoid();
-    }else {
-subsystem.closeSolenoid();
+    if (isPressed){
+      if(!armSubsystem.coneSensor.get())  
+        armSubsystem.spinMotor(-.9);
+      else  
+        armSubsystem.spinMotor(-.5);
     }
-    
+    else {
+      armSubsystem.spinMotor(0);
+    }
   }
 
   // Called once the command ends or is interrupted.

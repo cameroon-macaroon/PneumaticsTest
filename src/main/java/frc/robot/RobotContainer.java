@@ -4,12 +4,27 @@
 
 package frc.robot;
 
+import frc.robot.commands.ArmIn;
+import frc.robot.commands.ArmOut;
 //import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.CompressorControl;
+import frc.robot.commands.ElevatorDown;
+import frc.robot.commands.ElevatorUp;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.SolenoidClose;
+import frc.robot.commands.SolenoidOpen;
+import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.PneumaticsSubsystem;
+import frc.robot.subsystems.SwerveDriveTrain;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -26,6 +41,16 @@ public class RobotContainer {
   //private final CommandXboxController m_driverController =
       //new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+
+      private final XboxController xbox = new XboxController(0);
+
+
+      private final SwerveDriveTrain driveTrain = new SwerveDriveTrain();
+
+      private final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
+      
+      private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+      private final PneumaticsSubsystem m_pneumaticsSubsystem = new PneumaticsSubsystem();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -43,9 +68,26 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+    //new Trigger(m_exampleSubsystem::exampleCondition)
+    //    .onTrue(new ExampleCommand(m_exampleSubsystem));
 
+    driveTrain.setDefaultCommand(new SwerveDriveCommand(driveTrain, xbox));
+
+/*    new JoystickButton(xbox, 4).whileTrue(new ElevatorUp(m_elevatorSubsystem, true));
+    new JoystickButton(xbox, 1).whileTrue(new ElevatorDown(m_elevatorSubsystem, true));
+    new JoystickButton(xbox, 4).whileFalse(new ElevatorUp(m_elevatorSubsystem, false));
+    new JoystickButton(xbox, 1).whileFalse(new ElevatorDown(m_elevatorSubsystem, false));
+
+
+    //new JoystickButton(xbox, 4).whileTrue(new ArmOut(m_armSubsystem, true));
+    //new JoystickButton(xbox, 1).whileTrue(new ArmIn(m_armSubsystem, true));
+    //new JoystickButton(xbox, 4).whileFalse(new ArmOut(m_armSubsystem, false));
+    //new JoystickButton(xbox, 1).whileFalse(new ArmIn(m_armSubsystem, false));
+    
+    new JoystickButton(xbox, 6).toggleOnTrue(new SolenoidClose(m_pneumaticsSubsystem));
+    new JoystickButton(xbox, 6).toggleOnFalse(new SolenoidOpen(m_pneumaticsSubsystem));
+    
+    */
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());

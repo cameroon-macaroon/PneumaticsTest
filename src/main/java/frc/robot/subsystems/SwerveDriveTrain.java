@@ -29,27 +29,27 @@ public class SwerveDriveTrain extends SubsystemBase {
   public static double feildCalibration = 0; 
 
   //set offsets for every module 
-  public static double frontLeftOffset = 45.0; 
-  public static double frontRightOffset = 135.0; 
-  public static double backLeftOffset = 135.0; 
-  public static double backRightOffset = 65.0; 
+  public static double frontLeftOffset = 50; //1 
+  public static double frontRightOffset = 157;//0 
+  public static double backLeftOffset = 0;//3
+  public static double backRightOffset = 55; //2
 
   //set CAN ids for every module
-  public static final int frontLeftDriveId = 8; 
-  public static final int frontLeftCANCoderId = 6; 
-  public static final int frontLeftSteerId = 7; 
+  public static final int frontLeftDriveId = 10; 
+  public static final int frontLeftCANCoderId = 11; 
+  public static final int frontLeftSteerId = 9; 
   //put your can Id's here! 
-  public static final int frontRightDriveId = 14; 
-  public static final int frontRihtCANCoderId = 3; 
-  public static final int frontRightSteerId = 13; 
+  public static final int frontRightDriveId = 8; 
+  public static final int frontRightCANCoderId = 14; 
+  public static final int frontRightSteerId = 7; 
   //put your can Id's here! 
-  public static final int backLeftDriveId = 10; 
-  public static final int backleftCANCoderId = 5; 
-  public static final int backLeftSteerId = 9; 
+  public static final int backLeftDriveId = 4; 
+  public static final int backLeftCANCoderId = 12; 
+  public static final int backLeftSteerId = 3; 
   //put your can Id's here! 
-  public static final int backRightDriveId = 12; 
-  public static final int backRightCANCoderId = 4; 
-  public static final int backRightSteerId = 11; 
+  public static final int backRightDriveId = 6; 
+  public static final int backRightCANCoderId = 13; 
+  public static final int backRightSteerId = 5; 
 
 
   
@@ -83,10 +83,10 @@ public class SwerveDriveTrain extends SubsystemBase {
   //create array of Modules
   private SwerveModuleMK3[] modules = new SwerveModuleMK3[] {
     
-    new SwerveModuleMK3(new TalonFX(1), new TalonFX(1), new CANCoder(1), Rotation2d.fromDegrees(1)), // Front Left 
-    new SwerveModuleMK3(new TalonFX(2), new TalonFX(2), new CANCoder(2), Rotation2d.fromDegrees(2)), // Front Right 
-    new SwerveModuleMK3(new TalonFX(3), new TalonFX(3), new CANCoder(3), Rotation2d.fromDegrees(3)), // Back Left 
-    new SwerveModuleMK3(new TalonFX(4), new TalonFX(4), new CANCoder(4), Rotation2d.fromDegrees(4)), // Back Right 
+    new SwerveModuleMK3(new TalonFX(frontLeftDriveId), new TalonFX(frontLeftSteerId), new CANCoder(frontLeftCANCoderId), Rotation2d.fromDegrees(frontLeftOffset)), // Front Left
+    new SwerveModuleMK3(new TalonFX(frontRightDriveId), new TalonFX(frontRightSteerId), new CANCoder(frontRightCANCoderId), Rotation2d.fromDegrees(frontRightOffset)), // Front Right
+    new SwerveModuleMK3(new TalonFX(backLeftDriveId), new TalonFX(backLeftSteerId), new CANCoder(backLeftCANCoderId), Rotation2d.fromDegrees(backLeftOffset)), // Back Left
+    new SwerveModuleMK3(new TalonFX(backRightDriveId), new TalonFX(backRightSteerId), new CANCoder(backRightCANCoderId), Rotation2d.fromDegrees(backRightOffset))  // Back Right
   }; 
 
 

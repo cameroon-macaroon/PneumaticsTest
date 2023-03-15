@@ -32,6 +32,10 @@ public class PneumaticsSubsystem extends SubsystemBase {
     compressor.disable();
   }
 
+  public boolean getPressureSwitchValue(){
+    return compressor.getPressureSwitchValue();
+  }
+
   public void openSolenoid(){
     solenoid.set(Value.kReverse);
   }
