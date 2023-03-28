@@ -23,40 +23,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 public class SwerveDriveTrain extends SubsystemBase {
 
-  //set constants: max speed, max angle speed, field calibration 
-  public static final double kMaxSpeed = Units.feetToMeters(3.6); // 1 feet per second 
-  public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second 
-  public static double feildCalibration = 0; 
 
-  //set offsets for every module 
-  public static double frontLeftOffset = 50; //1 
-  public static double frontRightOffset = 157;//0 
-  public static double backLeftOffset = 0;//3
-  public static double backRightOffset = 55; //2
-
-  //set CAN ids for every module
-  public static final int frontLeftDriveId = 10; 
-  public static final int frontLeftCANCoderId = 11; 
-  public static final int frontLeftSteerId = 9; 
-  //put your can Id's here! 
-  public static final int frontRightDriveId = 8; 
-  public static final int frontRightCANCoderId = 14; 
-  public static final int frontRightSteerId = 7; 
-  //put your can Id's here! 
-  public static final int backLeftDriveId = 4; 
-  public static final int backLeftCANCoderId = 12; 
-  public static final int backLeftSteerId = 3; 
-  //put your can Id's here! 
-  public static final int backRightDriveId = 6; 
-  public static final int backRightCANCoderId = 13; 
-  public static final int backRightSteerId = 5; 
-
-
-  
-
-
-
-  //set gyro 
+    //set gyro 
   public static AHRS gyro = new AHRS(SPI.Port.kMXP); 
 
   //create Swerve Drive Kinematics 
@@ -83,10 +51,10 @@ public class SwerveDriveTrain extends SubsystemBase {
   //create array of Modules
   private SwerveModuleMK3[] modules = new SwerveModuleMK3[] {
     
-    new SwerveModuleMK3(new TalonFX(frontLeftDriveId), new TalonFX(frontLeftSteerId), new CANCoder(frontLeftCANCoderId), Rotation2d.fromDegrees(frontLeftOffset)), // Front Left
-    new SwerveModuleMK3(new TalonFX(frontRightDriveId), new TalonFX(frontRightSteerId), new CANCoder(frontRightCANCoderId), Rotation2d.fromDegrees(frontRightOffset)), // Front Right
-    new SwerveModuleMK3(new TalonFX(backLeftDriveId), new TalonFX(backLeftSteerId), new CANCoder(backLeftCANCoderId), Rotation2d.fromDegrees(backLeftOffset)), // Back Left
-    new SwerveModuleMK3(new TalonFX(backRightDriveId), new TalonFX(backRightSteerId), new CANCoder(backRightCANCoderId), Rotation2d.fromDegrees(backRightOffset))  // Back Right
+    new SwerveModuleMK3(new TalonFX(Constants.frontLeftDriveId), new TalonFX(Constants.frontLeftSteerId), new CANCoder(Constants.frontLeftCANCoderId), Rotation2d.fromDegrees(Constants.frontLeftOffset)), // Front Left
+    new SwerveModuleMK3(new TalonFX(Constants.frontRightDriveId), new TalonFX(Constants.frontRightSteerId), new CANCoder(Constants.frontRightCANCoderId), Rotation2d.fromDegrees(Constants.frontRightOffset)), // Front Right
+    new SwerveModuleMK3(new TalonFX(Constants.backLeftDriveId), new TalonFX(Constants.backLeftSteerId), new CANCoder(Constants.backLeftCANCoderId), Rotation2d.fromDegrees(Constants.backLeftOffset)), // Back Left
+    new SwerveModuleMK3(new TalonFX(Constants.backRightDriveId), new TalonFX(Constants.backRightSteerId), new CANCoder(Constants.backRightCANCoderId), Rotation2d.fromDegrees(Constants.backRightOffset))  // Back Right
   }; 
 
 
@@ -94,7 +62,8 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   /** Creates a new SwerveDriveTrain. */
   public SwerveDriveTrain() {
-     gyro.reset(); 
+    gyro.reset();
+    //gyro.zeroYaw(); 
   }
 
   //Drive method 
@@ -102,11 +71,12 @@ public class SwerveDriveTrain extends SubsystemBase {
 
     if(calibrateGyro){
       gyro.reset(); // recalibrates gyro offset 
+      //gyro.zeroYaw();
     } 
                                                                                       //Rotation2d.fromDegrees(-gyro.getAngle())
     SwerveModuleState[] states = kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot,Rotation2d.fromDegrees(-gyro.getAngle())) : new ChassisSpeeds(xSpeed, ySpeed, rot)); 
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, kMaxSpeed); 
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.kMaxSpeed); 
 
     for(int i = 0; i < states.length; i++) { 
       SwerveModuleMK3 module = modules[i]; 
@@ -114,7 +84,12 @@ public class SwerveDriveTrain extends SubsystemBase {
       SmartDashboard.putNumber(String.valueOf(i), module.getRawAngle()); 
       //below is a line to comment out from step 5 
       module.setDesiredState(state); 
-      //SmartDashboard.putNumber("gyro Angle", gyro.getAngle()); 
+      SmartDashboard.putNumber("gyro Angle", gyro.getAngle());
+
+      SmartDashboard.putNumber("gyro Q X", gyro.getQuaternionX());
+      SmartDashboard.putNumber("gyro Q Y", gyro.getQuaternionY());
+      SmartDashboard.putNumber("gyro Q Z", gyro.getQuaternionZ());
+
     }
   }
 

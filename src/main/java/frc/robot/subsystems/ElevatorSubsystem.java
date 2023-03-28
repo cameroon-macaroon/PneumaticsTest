@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -17,9 +19,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
-  static CANSparkMax elevatorMotor = new CANSparkMax(2,MotorType.kBrushless);
-  public static DigitalInput topSwitch = new DigitalInput(0);
-  public static DigitalInput bottomSwitch = new DigitalInput(1);
+  static CANSparkMax elevatorMotor = new CANSparkMax(Constants.sparkMaxDeviceID,MotorType.kBrushless);
+  public static DigitalInput topSwitch = new DigitalInput(Constants.topSwitchChannel);
+  public static DigitalInput bottomSwitch = new DigitalInput(Constants.bottomSwitchChannel);
 
 public static void turnOnMotor(double speed){
   elevatorMotor.set(speed);

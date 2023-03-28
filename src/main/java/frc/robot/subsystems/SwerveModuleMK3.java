@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 //motor controls to import: feedbackDevice, NeutralMode, Remote Sensor Source,
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -92,7 +93,7 @@ public class SwerveModuleMK3 {
     // configure created Configureation^^ 
     driveMotor.configAllSettings(driveTalonFXConfiguration); 
     // set nuetral mode to break
-    driveMotor.setNeutralMode(NeutralMode.Brake); 
+    driveMotor.setNeutralMode(NeutralMode.Coast); 
     
     CANCoderConfiguration canCoderConfiguration = new CANCoderConfiguration(); 
     canCoderConfiguration.magnetOffsetDegrees = offset.getDegrees(); 
@@ -127,6 +128,6 @@ public class SwerveModuleMK3 {
     double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond); 
 
     //below is a line to comment out from step 5 
-    driveMotor.set(TalonFXControlMode.PercentOutput, feetPerSecond / SwerveDriveTrain.kMaxSpeed); 
+    driveMotor.set(TalonFXControlMode.PercentOutput, feetPerSecond / Constants.kMaxSpeed); 
   }
 }

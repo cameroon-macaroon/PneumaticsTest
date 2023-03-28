@@ -6,6 +6,8 @@ package frc.robot;
 
 import frc.robot.commands.ArmIn;
 import frc.robot.commands.ArmOut;
+import frc.robot.commands.AutoSwerveDrive;
+import frc.robot.commands.AutoSwerveTurn;
 //import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.CompressorControl;
@@ -23,6 +25,8 @@ import frc.robot.subsystems.SwerveDriveTrain;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -42,7 +46,8 @@ public class RobotContainer {
       //new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
 
-      private final XboxController xbox = new XboxController(0);
+      private static final XboxController xbox1 = new XboxController(0);
+      private static final XboxController xbox2 = new XboxController(1);
 
 
       private final SwerveDriveTrain driveTrain = new SwerveDriveTrain();
@@ -71,23 +76,23 @@ public class RobotContainer {
     //new Trigger(m_exampleSubsystem::exampleCondition)
     //    .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    driveTrain.setDefaultCommand(new SwerveDriveCommand(driveTrain, xbox));
+    driveTrain.setDefaultCommand(new SwerveDriveCommand(driveTrain, xbox1));
 
-/*    new JoystickButton(xbox, 4).whileTrue(new ElevatorUp(m_elevatorSubsystem, true));
-    new JoystickButton(xbox, 1).whileTrue(new ElevatorDown(m_elevatorSubsystem, true));
-    new JoystickButton(xbox, 4).whileFalse(new ElevatorUp(m_elevatorSubsystem, false));
-    new JoystickButton(xbox, 1).whileFalse(new ElevatorDown(m_elevatorSubsystem, false));
+    new JoystickButton(xbox2, 4).whileTrue(new ElevatorUp(m_elevatorSubsystem, true));
+    new JoystickButton(xbox2, 1).whileTrue(new ElevatorDown(m_elevatorSubsystem, true));
+    new JoystickButton(xbox2, 4).whileFalse(new ElevatorUp(m_elevatorSubsystem, false));
+    new JoystickButton(xbox2, 1).whileFalse(new ElevatorDown(m_elevatorSubsystem, false));
 
 
-    //new JoystickButton(xbox, 4).whileTrue(new ArmOut(m_armSubsystem, true));
-    //new JoystickButton(xbox, 1).whileTrue(new ArmIn(m_armSubsystem, true));
-    //new JoystickButton(xbox, 4).whileFalse(new ArmOut(m_armSubsystem, false));
-    //new JoystickButton(xbox, 1).whileFalse(new ArmIn(m_armSubsystem, false));
+    new JoystickButton(xbox2, 6).whileTrue(new ArmOut(m_armSubsystem, true));
+    new JoystickButton(xbox2, 5).whileTrue(new ArmIn(m_armSubsystem, true));
+    new JoystickButton(xbox2, 6).whileFalse(new ArmOut(m_armSubsystem, false));
+    new JoystickButton(xbox2, 5).whileFalse(new ArmIn(m_armSubsystem, false));
     
-    new JoystickButton(xbox, 6).toggleOnTrue(new SolenoidClose(m_pneumaticsSubsystem));
-    new JoystickButton(xbox, 6).toggleOnFalse(new SolenoidOpen(m_pneumaticsSubsystem));
+    new JoystickButton(xbox2, 2).toggleOnTrue(new SolenoidOpen(m_pneumaticsSubsystem));
+   
+    //new JoystickButton(xbox2, 2).toggleOnFalse(new SolenoidClose(m_pneumaticsSubsystem));
     
-    */
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
@@ -100,6 +105,71 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return Commands.sequence( AutoElevatorUp(1), AutoArm(.6),AutoDrive());//, AutoOpen(), AutoElevatorDown(), AutoClose(), AutoElevatorUp(2), AutoArm(1.3),AutoTurn());
+    //return AutoDrive();
+    
   }
+
+  public Command AutoElevatorUp(double time){
+    return new ElevatorUp(m_elevatorSubsystem, true).withTimeout(time)
+    .andThen(new WaitCommand(.5));
+  }
+
+  public Command AutoArm(double time){
+    return new ArmOut(m_armSubsystem, true).withTimeout(time)
+    .andThen(new WaitCommand(.5));
+  }
+
+  public Command AutoElevatorDown(){
+    return new ElevatorDown(m_elevatorSubsystem, true).withTimeout(2.8);
+  }
+
+  public Command AutoOpen(){
+    return new SolenoidOpen(m_pneumaticsSubsystem).withTimeout(.5);
+  }
+
+  
+  public Command AutoClose(){
+    return new SolenoidClose(m_pneumaticsSubsystem).withTimeout(.5);
+  }
+
+  public Command AutoTurn(){// numbers on board
+    return new AutoSwerveTurn(driveTrain, .18).withTimeout(.92);
+  }
+
+  public Command AutoDrive(){
+    return new AutoSwerveDrive(driveTrain, -.10).withTimeout(.5);
+  }
+  
+
+
+
+  public static double getLeftYPower(){
+    double drivePower = xbox1.getRawAxis(0);
+    if (Math.abs(drivePower) < Constants.DEAD_ZONE){
+      drivePower = 0.0;
+    }
+
+    return drivePower;
+  }
+
+  public static double getLeftXPower(){
+    double drivePower = xbox1.getRawAxis(1);
+    if (Math.abs(drivePower) < Constants.DEAD_ZONE){
+      drivePower = 0.0;
+    }
+
+    return drivePower;
+  }
+
+  public static double getRightXPower(){
+    double drivePower = xbox1.getRawAxis(4);
+    if (Math.abs(drivePower) < Constants.DEAD_ZONE){
+      drivePower = 0.0;
+    }
+
+    return drivePower;
+  }
+
+
 }

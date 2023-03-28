@@ -16,7 +16,7 @@ public class PneumaticsSubsystem extends SubsystemBase {
   /** Creates a new PneumaticsSubsytem. */
   public PneumaticsSubsystem() {}
 
-  Compressor compressor = new Compressor(Constants.CompressorPort, PneumaticsModuleType.CTREPCM);
+  //Compressor compressor = new Compressor(Constants.CompressorPort, PneumaticsModuleType.CTREPCM);
   DoubleSolenoid solenoid = new DoubleSolenoid(Constants.SolenoidModule,PneumaticsModuleType.CTREPCM,Constants.fowardChannel,Constants.reverseChannel);
 
   @Override
@@ -25,17 +25,17 @@ public class PneumaticsSubsystem extends SubsystemBase {
   }
 
   public void turnOnCompressor(){
-    compressor.enableDigital();
+    //compressor.enableDigital();
   }
 
   public void turnOffCompressor(){
-    compressor.disable();
+    //compressor.disable();
   }
-
+/*
   public boolean getPressureSwitchValue(){
     return compressor.getPressureSwitchValue();
   }
-
+*/
   public void openSolenoid(){
     solenoid.set(Value.kReverse);
   }

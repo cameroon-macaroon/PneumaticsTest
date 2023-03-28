@@ -4,23 +4,23 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.SwerveDriveTrain;
+import frc.robot.Constants;
 
-public class ElevatorUp extends CommandBase {
-  final ElevatorSubsystem elevatorSubsystem;
-  boolean isPressed;
-  /** Creates a new ElevatorUp. */
-  public ElevatorUp(ElevatorSubsystem m_elevatorSubsystem, boolean m_isPressed) {
+public class AutoSwerveTurn extends CommandBase {
+  private final SwerveDriveTrain m_swerveDriveTrain;
+  private final double m_speed;
+  /** Creates a new AutoSwerveTurn. */
+  public AutoSwerveTurn(final SwerveDriveTrain SwerveDriveTrain)  {
     // Use addRequirements() here to declare subsystem dependencies.
-
-    elevatorSubsystem = m_elevatorSubsystem;
-    addRequirements(m_elevatorSubsystem);
-
-    isPressed = m_isPressed;
+this(SwerveDriveTrain, Constants.DEFAULT_SPEED);
   }
-
+  public AutoSwerveTurn(final SwerveDriveTrain swerveDriveTrain, final double speed){
+    this.m_swerveDriveTrain = swerveDriveTrain;
+    this.m_speed = speed;
+    addRequirements(this.m_swerveDriveTrain);
+  }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
@@ -28,21 +28,13 @@ public class ElevatorUp extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(elevatorSubsystem.topSwitch.get() && isPressed){
-      elevatorSubsystem.turnOnMotor(-.2);
-      SmartDashboard.putString("State","Moving Up");
-    }
-    else{
-      elevatorSubsystem.turnOnMotor(-0.02);
-      
-      SmartDashboard.putString("State","Static");
-    }
+    m_swerveDriveTrain.drive(0, 0, m_speed, true, false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    elevatorSubsystem.turnOnMotor(-.02);
+    m_swerveDriveTrain.drive(0, 0, 0, true, false);
   }
 
   // Returns true when the command should end.

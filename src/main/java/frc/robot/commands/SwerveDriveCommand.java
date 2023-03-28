@@ -14,6 +14,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 //files to import: DriveTrain Sybsystem, Module Subsystem, RobotContainer
 import frc.robot.subsystems.SwerveDriveTrain;
 import frc.robot.subsystems.SwerveModuleMK3;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class SwerveDriveCommand extends CommandBase {
@@ -45,15 +46,15 @@ public class SwerveDriveCommand extends CommandBase {
   public void execute() {
 
     //calculate ySpeed, xSpeed, rotSpeed
-    final var xSpeed = -xSpeedLimiter.calculate(xbox.getRawAxis(1)* SwerveDriveTrain.kMaxSpeed);  //times max speed
-    final var ySpeed = -ySpeedLimiter.calculate(xbox.getRawAxis(0)* SwerveDriveTrain.kMaxSpeed);  //times max speed
-    final var rot = -rotLimiter.calculate(xbox.getRawAxis(4)* SwerveDriveTrain.kMaxSpeed);  //times max angle speed
+    final var xSpeed = -xSpeedLimiter.calculate(RobotContainer.getLeftXPower() * Constants.kMaxSpeed);  //times max speed
+    final var ySpeed = -ySpeedLimiter.calculate(RobotContainer.getLeftYPower()* Constants.kMaxSpeed);  //times max speed
+    final var rot = -rotLimiter.calculate(RobotContainer.getRightXPower()* Constants.kMaxAngularSpeed);  //times max angle speed
 
     //set calibration type (self / field)
-    boolean calibrate = xbox.getLeftBumper();
+    boolean calibrate = xbox.getRightBumper();
 
     //drive method
-    driveTrain.drive(xSpeed, ySpeed, rot, false, calibrate);
+    driveTrain.drive(xSpeed, ySpeed, rot, true, calibrate);
 
   }
 

@@ -4,11 +4,19 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.PneumaticsSubsystem;
 
 /**
@@ -22,8 +30,20 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  //PneumaticsSubsystem pneumaticsSubsystem = new PneumaticsSubsystem();
-  //Timer time = new Timer();
+  ArmSubsystem armSubsystem = new ArmSubsystem();
+  Compressor compressor = new Compressor(Constants.CompressorPort, PneumaticsModuleType.CTREPCM);
+  Timer time = new Timer();
+ 
+  
+  final UsbCamera reflectiveCamera = CameraServer.startAutomaticCapture(1);
+  CvSink cvSink1 = CameraServer.getVideo();
+  CvSource outputStream1 = CameraServer.putVideo("Camera High", 160,  120);
+
+
+  final UsbCamera pickUpCamera = CameraServer.startAutomaticCapture(0);
+  CvSink cvSink2 = CameraServer.getVideo();
+  CvSource outputStream2 = CameraServer.putVideo("Camera Low", 160,  120);
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -34,7 +54,9 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    //pneumaticsSubsystem.turnOnCompressor();
+
+    
+    compressor.enableDigital();
      
   }
 
@@ -54,30 +76,27 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     
-    //boolean pressorSwitchValue = pneumaticsSubsystem.getPressureSwitchValue();
-    //SmartDashboard.putBoolean("Pressure value", pressorSwitchValue);
+    boolean pressorSwitchValue = compressor.getPressureSwitchValue();
+    SmartDashboard.putBoolean("Pressure value", pressorSwitchValue);
+    
+    //boolean coneSensorValue = coneSensor.get();
+    SmartDashboard.putBoolean("Cone Sensor", !armSubsystem.coneSensor.get());
 
+    SmartDashboard.putNumber("Timer", time.get());
     
 
-    //SmartDashboard.putNumber("Timer", time.get());
-    
 
-/* 
     if(pressorSwitchValue){
-      pneumaticsSubsystem.turnOffCompressor();
+      compressor.disable();
       time.start();
     }
     else{
       if(time.get()>=15.0){
-        pneumaticsSubsystem.turnOnCompressor();
+        compressor.enableDigital();
         time.reset();
       }
     }
-    */
-
-
-
-
+  
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -96,11 +115,16 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
+    
+
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+ 
+  }
 
   @Override
   public void teleopInit() {
@@ -111,6 +135,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
   }
 
   /** This function is called periodically during operator control. */
