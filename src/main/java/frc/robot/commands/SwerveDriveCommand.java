@@ -54,8 +54,18 @@ public class SwerveDriveCommand extends CommandBase {
     boolean calibrate = xbox.getRightBumper();
 
     //drive method
-    driveTrain.drive(xSpeed, ySpeed, rot, true, calibrate);
+    driveTrain.drive(xSpeed, ySpeed, rot, true, calibrate,true);
 
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    driveTrain.drive(0, 0, 0, true, false,true);
+  }
+
+  @Override
+  public boolean isFinished() {
+    return false;
   }
 
  

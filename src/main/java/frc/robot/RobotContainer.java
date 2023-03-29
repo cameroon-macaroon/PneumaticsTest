@@ -16,6 +16,7 @@ import frc.robot.commands.ElevatorUp;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SolenoidClose;
 import frc.robot.commands.SolenoidOpen;
+import frc.robot.commands.SwerveBreak;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -78,6 +79,8 @@ public class RobotContainer {
 
     driveTrain.setDefaultCommand(new SwerveDriveCommand(driveTrain, xbox1));
 
+    new JoystickButton(xbox1, 5).whileTrue(new SwerveBreak(driveTrain));
+
     new JoystickButton(xbox2, 4).whileTrue(new ElevatorUp(m_elevatorSubsystem, true));
     new JoystickButton(xbox2, 1).whileTrue(new ElevatorDown(m_elevatorSubsystem, true));
     new JoystickButton(xbox2, 4).whileFalse(new ElevatorUp(m_elevatorSubsystem, false));
@@ -91,6 +94,7 @@ public class RobotContainer {
     
     new JoystickButton(xbox2, 2).toggleOnTrue(new SolenoidOpen(m_pneumaticsSubsystem));
    
+    
     //new JoystickButton(xbox2, 2).toggleOnFalse(new SolenoidClose(m_pneumaticsSubsystem));
     
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
@@ -138,7 +142,7 @@ public class RobotContainer {
   }
 
   public Command AutoDrive(){
-    return new AutoSwerveDrive(driveTrain, -.10).withTimeout(.5);
+    return new AutoSwerveDrive(driveTrain, -.10).withTimeout(1);
   }
   
 

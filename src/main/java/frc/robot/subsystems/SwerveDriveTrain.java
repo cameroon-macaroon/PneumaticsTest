@@ -26,6 +26,7 @@ public class SwerveDriveTrain extends SubsystemBase {
 
     //set gyro 
   public static AHRS gyro = new AHRS(SPI.Port.kMXP); 
+  public boolean m_isCoast;
 
   //create Swerve Drive Kinematics 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics( 
@@ -51,10 +52,10 @@ public class SwerveDriveTrain extends SubsystemBase {
   //create array of Modules
   private SwerveModuleMK3[] modules = new SwerveModuleMK3[] {
     
-    new SwerveModuleMK3(new TalonFX(Constants.frontLeftDriveId), new TalonFX(Constants.frontLeftSteerId), new CANCoder(Constants.frontLeftCANCoderId), Rotation2d.fromDegrees(Constants.frontLeftOffset)), // Front Left
-    new SwerveModuleMK3(new TalonFX(Constants.frontRightDriveId), new TalonFX(Constants.frontRightSteerId), new CANCoder(Constants.frontRightCANCoderId), Rotation2d.fromDegrees(Constants.frontRightOffset)), // Front Right
-    new SwerveModuleMK3(new TalonFX(Constants.backLeftDriveId), new TalonFX(Constants.backLeftSteerId), new CANCoder(Constants.backLeftCANCoderId), Rotation2d.fromDegrees(Constants.backLeftOffset)), // Back Left
-    new SwerveModuleMK3(new TalonFX(Constants.backRightDriveId), new TalonFX(Constants.backRightSteerId), new CANCoder(Constants.backRightCANCoderId), Rotation2d.fromDegrees(Constants.backRightOffset))  // Back Right
+    new SwerveModuleMK3(new TalonFX(Constants.frontLeftDriveId), new TalonFX(Constants.frontLeftSteerId), new CANCoder(Constants.frontLeftCANCoderId), Rotation2d.fromDegrees(Constants.frontLeftOffset),m_isCoast), // Front Left
+    new SwerveModuleMK3(new TalonFX(Constants.frontRightDriveId), new TalonFX(Constants.frontRightSteerId), new CANCoder(Constants.frontRightCANCoderId), Rotation2d.fromDegrees(Constants.frontRightOffset),m_isCoast), // Front Right
+    new SwerveModuleMK3(new TalonFX(Constants.backLeftDriveId), new TalonFX(Constants.backLeftSteerId), new CANCoder(Constants.backLeftCANCoderId), Rotation2d.fromDegrees(Constants.backLeftOffset),m_isCoast), // Back Left
+    new SwerveModuleMK3(new TalonFX(Constants.backRightDriveId), new TalonFX(Constants.backRightSteerId), new CANCoder(Constants.backRightCANCoderId), Rotation2d.fromDegrees(Constants.backRightOffset),m_isCoast)  // Back Right
   }; 
 
 
@@ -67,7 +68,14 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
 
   //Drive method 
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean calibrateGyro) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean calibrateGyro, boolean isCoast) {
+
+    if(isCoast){
+      this.m_isCoast = true;
+    }else{
+      this.m_isCoast = false;
+    }
+
 
     if(calibrateGyro){
       gyro.reset(); // recalibrates gyro offset 

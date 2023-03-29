@@ -6,21 +6,18 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveTrain;
-import frc.robot.Constants;
 
-public class AutoSwerveTurn extends CommandBase {
+public class SwerveBreak extends CommandBase {
   private final SwerveDriveTrain m_swerveDriveTrain;
-  private final double m_speed;
-  /** Creates a new AutoSwerveTurn. */
-  public AutoSwerveTurn(final SwerveDriveTrain SwerveDriveTrain)  {
+
+  /** Creates a new SwerveBreak. */
+  public SwerveBreak(final SwerveDriveTrain swerveDriveTrain) {
     // Use addRequirements() here to declare subsystem dependencies.
-this(SwerveDriveTrain, Constants.DEFAULT_SPEED);
-  }
-  public AutoSwerveTurn(final SwerveDriveTrain swerveDriveTrain, final double speed){
     this.m_swerveDriveTrain = swerveDriveTrain;
-    this.m_speed = speed;
-    addRequirements(this.m_swerveDriveTrain);
+    addRequirements(swerveDriveTrain);
+
   }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
@@ -28,13 +25,14 @@ this(SwerveDriveTrain, Constants.DEFAULT_SPEED);
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_swerveDriveTrain.drive(0, 0, m_speed, true, false,true);
+    m_swerveDriveTrain.drive(0, 0, 0, true, false,false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_swerveDriveTrain.drive(0, 0, 0, true, false,true);
+    m_swerveDriveTrain.drive(0, 0, 0, true, false,false);
+  
   }
 
   // Returns true when the command should end.

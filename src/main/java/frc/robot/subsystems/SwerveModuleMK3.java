@@ -47,15 +47,17 @@ public class SwerveModuleMK3 {
   private TalonFX angleMotor;
   private CANCoder canCoder;
   private Rotation2d offset;
+  private boolean isCoast;
 
                         //Pass in: created objects
-  public SwerveModuleMK3(TalonFX driveMotor, TalonFX angleMotor,CANCoder canCoder, Rotation2d offset) {
+  public SwerveModuleMK3(TalonFX driveMotor, TalonFX angleMotor,CANCoder canCoder, Rotation2d offset, boolean isCoast) {
     
     //set passed in objects to created objects 
     this.driveMotor = driveMotor;
     this.angleMotor = angleMotor;
     this.canCoder = canCoder;
     this.offset = offset;
+    this.isCoast = isCoast;
 
 //angle motor settings
     // create angle TalonFX Configuration 
@@ -93,7 +95,11 @@ public class SwerveModuleMK3 {
     // configure created Configureation^^ 
     driveMotor.configAllSettings(driveTalonFXConfiguration); 
     // set nuetral mode to break
-    driveMotor.setNeutralMode(NeutralMode.Coast); 
+    if(isCoast)
+      driveMotor.setNeutralMode(NeutralMode.Coast); 
+    else{
+      driveMotor.setNeutralMode(NeutralMode.Brake); 
+    }
     
     CANCoderConfiguration canCoderConfiguration = new CANCoderConfiguration(); 
     canCoderConfiguration.magnetOffsetDegrees = offset.getDegrees(); 
