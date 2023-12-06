@@ -29,9 +29,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 public class SwerveModuleMK3 {
 
   // set constant PIDF values
-  private static final double kDriveP = 15.0; //need to pick these values
+  private static final double kDriveP = 5.0; //need to pick these values
   private static final double kDriveI = 0.01; //these are from last year
-  private static final double kDriveD = 0.1;  //TODO: figure out what these should be 
+  private static final double kDriveD = 0.0;  //TODO: figure out what these should be 
   private static final double kDriveF = 0.2;
 
   // set constant PID values

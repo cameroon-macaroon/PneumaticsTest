@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PneumaticsSubsystem extends SubsystemBase {
   /** Creates a new PneumaticsSubsytem. */
@@ -18,10 +19,13 @@ public class PneumaticsSubsystem extends SubsystemBase {
 
   //Compressor compressor = new Compressor(Constants.CompressorPort, PneumaticsModuleType.CTREPCM);
   DoubleSolenoid solenoid = new DoubleSolenoid(Constants.SolenoidModule,PneumaticsModuleType.CTREPCM,Constants.fowardChannel,Constants.reverseChannel);
+  
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Grab", solenoid.isFwdSolenoidDisabled());
+
   }
 
   public void turnOnCompressor(){

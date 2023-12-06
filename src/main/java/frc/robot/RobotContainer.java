@@ -17,6 +17,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SolenoidClose;
 import frc.robot.commands.SolenoidOpen;
 import frc.robot.commands.SwerveBreak;
+import frc.robot.commands.SwerveCalibrate;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -109,7 +110,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Commands.sequence( AutoElevatorUp(1), AutoArm(.6),AutoDrive());//, AutoOpen(), AutoElevatorDown(), AutoClose(), AutoElevatorUp(2), AutoArm(1.3),AutoTurn());
+    return Commands.sequence(AutoElevatorUp(1), AutoArm(.6), AutoDrive(-.10), AutoTurn(), AutoCalibrate());//, AutoOpen(), AutoElevatorDown(), AutoClose(), AutoElevatorUp(2), AutoArm(1.3),AutoTurn());
     //return AutoDrive();
     
   }
@@ -138,11 +139,17 @@ public class RobotContainer {
   }
 
   public Command AutoTurn(){// numbers on board
-    return new AutoSwerveTurn(driveTrain, .18).withTimeout(.92);
+    return new AutoSwerveTurn(driveTrain, .18).withTimeout(1.7)
+    .andThen(new WaitCommand(.25));
   }
 
-  public Command AutoDrive(){
-    return new AutoSwerveDrive(driveTrain, -.10).withTimeout(1);
+  public Command AutoDrive(double speed){
+    return new AutoSwerveDrive(driveTrain, speed).withTimeout(.5)
+    .andThen(new WaitCommand(.25));
+  }
+
+  public Command AutoCalibrate(){
+    return new SwerveCalibrate(driveTrain);
   }
   
 

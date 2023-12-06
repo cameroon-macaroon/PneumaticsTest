@@ -20,7 +20,7 @@ import frc.robot.RobotContainer;
 public class SwerveDriveCommand extends CommandBase {
   
   //create objects: robotContainer, driveTrain, xbox
-  private RobotContainer robotContainer;
+  //private RobotContainer robotContainer;
   private SwerveDriveTrain driveTrain;
   private final XboxController xbox;
 

@@ -31,9 +31,9 @@ public final class Constants {
     
   //set offsets for every module 
   public static double frontLeftOffset = 55; //1 
-  public static double frontRightOffset = 150;//0 
+  public static double frontRightOffset = 150; 
   public static double backLeftOffset = 25;//3
-  public static double backRightOffset = 55; //2
+  public static double backRightOffset =55; //2
 
   //set CAN ids for every module
   public static final int frontLeftDriveId = 10; 

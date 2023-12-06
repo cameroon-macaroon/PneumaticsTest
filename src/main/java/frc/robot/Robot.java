@@ -34,16 +34,13 @@ public class Robot extends TimedRobot {
   Compressor compressor = new Compressor(Constants.CompressorPort, PneumaticsModuleType.CTREPCM);
   Timer time = new Timer();
  
+    private UsbCamera reflectiveCamera;
+    
   
-  final UsbCamera reflectiveCamera = CameraServer.startAutomaticCapture(1);
-  CvSink cvSink1 = CameraServer.getVideo();
-  CvSource outputStream1 = CameraServer.putVideo("Camera High", 160,  120);
 
-
-  final UsbCamera pickUpCamera = CameraServer.startAutomaticCapture(0);
-  CvSink cvSink2 = CameraServer.getVideo();
-  CvSource outputStream2 = CameraServer.putVideo("Camera Low", 160,  120);
-
+  
+  //private UsbCamera pickUpCamera;
+  
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -57,6 +54,27 @@ public class Robot extends TimedRobot {
 
     
     compressor.enableDigital();
+
+    try{
+      reflectiveCamera = CameraServer.startAutomaticCapture(0);
+      CvSink cvSink1 = CameraServer.getVideo();
+      CvSource outputStream1 = CameraServer.putVideo("Camera High", 160,  120);
+
+    }
+    catch(Exception e1){
+      System.err.println("Camera 1 failed");
+    }
+/* 
+    try{
+      final UsbCamera pickUpCamera = CameraServer.startAutomaticCapture(0);
+      CvSink cvSink2 = CameraServer.getVideo();
+      CvSource outputStream2 = CameraServer.putVideo("Camera Low", 160,  120);
+
+    }
+    catch(Exception e2){
+      System.err.println("Camera 2 failed");
+    }
+    */
      
   }
 

@@ -29,7 +29,7 @@ public class ElevatorDown extends CommandBase {
   @Override
   public void execute() {
     if(elevatorSubsystem.bottomSwitch.get() && isPressed){
-      elevatorSubsystem.turnOnMotor(.08);
+      elevatorSubsystem.turnOnMotor(.12);
       SmartDashboard.putString("State","Movint Down");
     }
     else{
