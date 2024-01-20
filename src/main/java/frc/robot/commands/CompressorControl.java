@@ -4,10 +4,10 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.PneumaticsSubsystem;
 
-public class CompressorControl extends CommandBase {
+public class CompressorControl extends Command {
   final PneumaticsSubsystem subsystem;
   boolean isPressed;
   /** Creates a new CompressorControl. */

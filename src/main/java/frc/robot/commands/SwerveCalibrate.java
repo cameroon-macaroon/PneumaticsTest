@@ -4,10 +4,10 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveDriveTrain;
 
-public class SwerveCalibrate extends CommandBase {
+public class SwerveCalibrate extends Command {
   private final SwerveDriveTrain m_swerveDriveTrain;
 
   /** Creates a new SwerveBreak. */

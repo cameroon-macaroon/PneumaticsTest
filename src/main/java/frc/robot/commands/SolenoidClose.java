@@ -4,10 +4,10 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.PneumaticsSubsystem;
 
-public class SolenoidClose extends CommandBase {
+public class SolenoidClose extends Command {
   final PneumaticsSubsystem pneumaticsSubsystem;
   
   /** Creates a new SolenoidControl. */

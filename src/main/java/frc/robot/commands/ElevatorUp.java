@@ -5,10 +5,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-public class ElevatorUp extends CommandBase {
+public class ElevatorUp extends Command {
   final ElevatorSubsystem elevatorSubsystem;
   boolean isPressed;
   /** Creates a new ElevatorUp. */

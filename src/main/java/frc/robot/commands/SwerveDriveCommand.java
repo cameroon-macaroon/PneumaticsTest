@@ -4,7 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
 
 //resources to import: controller, SlewRateLimiter, 
@@ -17,7 +17,7 @@ import frc.robot.subsystems.SwerveModuleMK3;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
-public class SwerveDriveCommand extends CommandBase {
+public class SwerveDriveCommand extends Command {
   
   //create objects: robotContainer, driveTrain, xbox
   //private RobotContainer robotContainer;

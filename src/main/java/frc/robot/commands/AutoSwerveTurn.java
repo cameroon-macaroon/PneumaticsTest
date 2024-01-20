@@ -4,11 +4,11 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveDriveTrain;
 import frc.robot.Constants;
 
-public class AutoSwerveTurn extends CommandBase {
+public class AutoSwerveTurn extends Command {
   private final SwerveDriveTrain m_swerveDriveTrain;
   private final double m_speed;
   /** Creates a new AutoSwerveTurn. */
